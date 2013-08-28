@@ -1,0 +1,230 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+
+    <title>The Dark Side of the Performance Moon</title>
+
+    <meta name="description" content="A presentation about network performance and how it affects load time">
+    <meta name="author" content="Jack Lawson <ajacksified@gmail.com>">
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="lib/css/rainbow.css">
+    <link rel="stylesheet" href="css/theme/airbnb.css" id="theme">
+
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+      document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <div class="reveal">
+      <!-- Any section element inside of this container is displayed as a slide -->
+      <div class="slides">
+        <section data-state='title background'>
+          <img src="img/moon.jpg" />
+
+          <h1>
+            Macht Schnell
+            <br />
+            The Dark Side of the Performance Moon
+          </h1>
+        </section>
+
+        <section>
+          <h1>Performance Golden Rule</h1>
+          <h2>Make Less Requests for Smaller Content</h2>
+        </section>
+
+        <section>
+          <ul>
+            <li>Global styles, not per-page styles
+            <li>Lazy-load images
+            <li>Lazy-load javascript
+            <li>Concatenate css, javacsript
+            <li>Load using sharded, cookieless domains
+          </ul>
+        </section>
+
+        <section data-state='background the-battle'>
+          <img src='img/the_battle.jpg' />
+        </section>
+
+        <section data-state='nate background image-macro'>
+          <header>IN THE CLOUD</header>
+          <footer>
+            <span class='fragment'>HIGH LATENCY,</span>
+            <span class='fragment'>PACKET LOSS,</span>
+            <span class='fragment'>SLOW BROWSERS,</span>
+            <span class='fragment'>DEEP PACKET INSPECTION,</span>
+            <span class='fragment'>OLD COMPUTERS,</span>
+            <span class='fragment'>3G NETWORKS,</span>
+            <span class='fragment'>SLOW REQUESTS</span>
+            <span class='fragment'> </span>
+          </footer>
+        </section>
+
+        <section data-state='background cables'>
+          <h2>The Speed of Light</h2>
+          <h4>299,792,458 m / s</h4>
+        </section>
+
+        <section>
+          <h2>From EC2 in Virginia</h2>
+          <ul>
+            <li>15ms to San Francisco
+            <li>37ms to Beijing
+          </ul>
+        </section>
+
+        <section>
+          <h2>But Wait, I Don't Have a Cable From VA to My Computer</h2>
+          <h4>Oh. Right.</h4>
+        </section>
+
+        <section>
+          <img src='img/network-diagram.png' />
+        </section>
+
+        <section>
+          <h2>Packet Loss</h2>
+          <p>
+            Another round-trip if <em>anything</em> is corrupted along the 
+            way
+          </p>
+        </section>
+
+        <section>
+          <h2>distance * speed of light gives us two things to change</h2>
+          <p>Lower the distance</p>
+          <p>Increase the speed of light</p>
+        </section>
+
+        <section>
+          <h1>Wormholes</h1>
+          <h3>Are Prohibitively Expensive</h3>
+        </section>
+
+        <section>
+          <h2>Move The Content Closer</h2>
+          <h3>(Edge Caching)</h3>
+          <h4>(Akamai, ChinaCache)</h4>
+        </section>
+
+        <section>
+          <h2>Edge Caching</h2>
+          <p>
+            Local servers keep content cached, so users can load
+            from <em>somewhere close</em> instead of across the world.
+          </p>
+          <ul>
+            <li>Images
+            <li>CSS
+            <li>Javascript
+            <li>Pages that don't refresh often
+          </ul>
+        </section>
+
+        <section data-state="background train">
+          <h2>TCP (how the internet works)</h2>
+          <p>
+            Imagine a train.
+          </p>
+        </section>
+
+        <section>
+          <h2>TCP Connection</h2>
+          <ol>
+            <li>
+              Someone telegrams airbnb.com to say a train is coming
+            <li>
+              airbnb.com sends a telegram back to say "okay"
+            <li>
+              airbnb sets up a train track connection
+            <li>
+              the train cars start small and get larger as they arrive
+              successfully, until they get too big and start to fail
+          </ol>
+        </section>
+
+        <section>
+          <h2>TCP Connection</h2>
+          <h3>You must establish a new connection for every request.</h3>
+        </section>
+
+        <section>
+          <h2>SPDY (how the better internet works)</h2>
+          <p>
+            Instead of new connections, SPDY reuses the existing connection
+            and makes <strong>parallel</strong> requests.
+          </p>
+        </section>
+
+        <section>
+          <h2>SPDY, Also.</h2>
+          <ul>
+            <li>Header compression (you only send cookies, etc once)
+            <li>Always SSL (yay security)
+            <li>Less packet loss, better socket utilization
+          </ul>
+        </section>
+
+        <section>
+          <h2>If You Have a SPDY Connection</h2>
+          <ul>
+            <li>No more domain sharding (a0-a3.muscache.com)
+            <li>No need to concatenate scripts (except legacy support)
+            <li>It's currently enabled for our static assets
+          </ul>
+        </section>
+
+        <section>
+          <h2>Overview</h2>
+          <ul>
+            <li>Cheat spacetime by using edge caches
+            <li>Lower time spent on data transfers by re-using connections
+            <li>Any Questions?</li>
+          </ul>
+        </section>
+      </div>
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.min.js"></script>
+    <script src="lib/js/rainbow.js"></script>
+
+    <script>
+      // Full list of configuration options available here:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+
+        theme: 'airbnb', // available themes are in /css/theme
+        transition: 'none', // default/cube/page/concave/zoom/linear/fade/none
+
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+          { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+          { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+        ]
+      });
+    </script>
+  </body>
+</html>
